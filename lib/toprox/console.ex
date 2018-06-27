@@ -1,22 +1,50 @@
 defmodule Toprox.Console do
-  @moduledoc false
+  @moduledoc """
+  A simple proxy for standard Console backend which allows to filter messages based on metadata.
+
+  ## Usage
+
+  In `config.exs`:
+
+          config :logger, backends: [
+            oprox, :warn_console}
+          ]
+
+          config :logger, :warn_console,
+            level: :warn,
+            backend: {
+              Toprox.Console, [
+              format: ">>> $date $time [$level] $metadata$message\n",
+              metadata: [:user_id]
+            ]
+          }
+
+  In code:
+
+          Logger.error "Error", topic: :warn_console
+
+  """
 
   @behaviour :gen_event
 
+  @doc false
   def init({__MODULE__, name}) do
     {:ok, configure(name, [])}
   end
 
+  @doc false
   def handle_call({:configure, opts}, %{name: name} = state) do
     {:ok, :ok, configure(name, opts, state)}
   end
 
+  @doc false
   def handle_event(event, state) do
     {:ok, new_console_state} = log_event(event, state)
 
     {:ok, %{state | console_state: new_console_state}}
   end
 
+  @doc false
   def handle_info(info, state) do
     {:ok, new_console_state} = process_info(info, state)
 
