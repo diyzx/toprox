@@ -1,0 +1,10 @@
+_build/
+cover/
+deps/
+doc/
+docs/_build
+.fetch
+erl_crash.dump
+*.ez
+.DS_Store
+*.log
