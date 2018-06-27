@@ -7,15 +7,15 @@ defmodule Toprox.Console do
   In `config.exs`:
 
           config :logger, backends: [
-            oprox, :warn_console}
+            {Toprox, :warn_console}
           ]
 
           config :logger, :warn_console,
             level: :warn,
             backend: {
               Toprox.Console, [
-              format: ">>> $date $time [$level] $metadata$message\n",
-              metadata: [:user_id]
+                format: ">>> $date $time [$level] $metadata$message",
+                metadata: [:user_id]
             ]
           }
 
